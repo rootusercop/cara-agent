@@ -79,16 +79,16 @@
 }
 
 \author{%
-  Nikhil Katre\thanks{Equal contribution.}\\
-  \textit{Independent Researcher}\\
+  Nikhil Katre\thanks{Equal contribution. Work performed independently of the authors' employers.}\\
+  \textit{Walmart Global Tech}\\
   \texttt{npkatre@gmail.com}
   \and
-  Shweta Mane\footnotemark[1]\\
-  \textit{Independent Researcher}\\
+  Shweta Mane\thanks{Equal contribution. Work performed independently of the authors' employers.}\\
+  \textit{Google}\\
   \texttt{maneshweta1991@gmail.com}%
 }
 
-\date{March 2026 \quad \texttt{arXiv:XXXX.XXXXX [cs.SE]}}
+\date{March 2026}
 
 \begin{document}
 \maketitle
@@ -300,7 +300,7 @@ Pact              & & \checkmark & \checkmark & \\
 \subsection{System Overview}
 
 Figure~\ref{fig:architecture} shows CARA's architecture. A ReAct-style
-reasoning loop~\cite{yao2023react} drives a Claude claude-sonnet-4-6 LLM with native tool
+reasoning loop~\cite{yao2023react} drives a Claude 3.5 Sonnet LLM with native tool
 use~\cite{anthropic2024claude}. The agent alternates between \textsc{Thought},
 \textsc{Action}, and \textsc{Observation} steps until it produces a migration report.
 
@@ -523,7 +523,7 @@ rate, adapter generation rate, and overall pass rate.
 reasoning — change detection and classification only, no consumer tracing, no
 plan generation, no adapter code.
 
-\textbf{LLM-only:} Claude claude-sonnet-4-6 with no tools, prompted with the same
+\textbf{LLM-only:} Claude 3.5 Sonnet with no tools, prompted with the same
 schema/API diffs and asked to produce a migration plan.
 
 \subsection{Results}
@@ -711,7 +711,7 @@ open-source repositories.
 
 \smallskip
 \noindent All code, benchmark data, and evaluation scripts:
-\url{https://github.com/nkatre/cara-agent}
+\url{https://github.com/rootusercop/cara-agent}
 
 \balance
 \bibliographystyle{abbrv}
