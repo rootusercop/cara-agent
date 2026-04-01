@@ -8,17 +8,25 @@ CARA is a ReAct-style LLM agent that treats schema migration and API contract ev
 
 ```bash
 pip install -r requirements.txt
-export ANTHROPIC_API_KEY=sk-ant-...
 python examples/demo_field_rename.py
 ```
 
 ## Run Evaluation
 
 ```bash
-python run_eval.py                          # all 15 cases
-python run_eval.py --cases case_01 case_07  # specific cases
-python run_eval.py --language kotlin        # Kotlin adapters
-python run_eval.py --output results.json    # save to file
+# No API key required (deterministic direct runner)
+python run_eval.py --provider direct                         # all cases
+python run_eval.py --provider direct --cases case_01 case_07 # specific cases
+python run_eval.py --provider direct --language kotlin        # Kotlin adapters
+python run_eval.py --provider direct --output results.json    # save to file
+
+# With a local Ollama model (no API key required)
+# Install Ollama from https://ollama.com, then: ollama pull llama3.2
+python run_eval.py --provider ollama
+
+# With Claude via Anthropic API
+export ANTHROPIC_API_KEY=<your-key>
+python run_eval.py
 ```
 
 ## Project Structure

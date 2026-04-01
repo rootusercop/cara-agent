@@ -2,8 +2,9 @@
 CARA Demo: Analyze a user_id -> account_id rename across schema and API.
 
 Run with:
-    export ANTHROPIC_API_KEY=sk-ant-...
-    python examples/demo_field_rename.py
+    python examples/demo_field_rename.py                    # no API key needed
+    python examples/demo_field_rename.py --provider ollama  # local Ollama model
+    python examples/demo_field_rename.py --provider claude  # requires ANTHROPIC_API_KEY
 """
 
 import json
@@ -12,7 +13,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-from agent.cara_agent import CARAAgent
+from agent.direct_agent import DirectCARAAgent
 
 OLD_SCHEMA = """
 CREATE TABLE accounts (
@@ -84,16 +85,29 @@ paths:
 
 
 def main() -> None:
-    api_key = os.environ.get("ANTHROPIC_API_KEY")
-    if not api_key:
-        print("Set ANTHROPIC_API_KEY and re-run.")
-        sys.exit(1)
+    provider = "direct"
+    if "--provider" in sys.argv:
+        idx = sys.argv.index("--provider")
+        if idx + 1 < len(sys.argv):
+            provider = sys.argv[idx + 1]
+
+    if provider == "claude":
+        from agent.cara_agent import CARAAgent
+        api_key = os.environ.get("ANTHROPIC_API_KEY")
+        if not api_key:
+            print("Set ANTHROPIC_API_KEY to use the Claude provider.")
+            sys.exit(1)
+        agent = CARAAgent(api_key=api_key)
+    elif provider == "ollama":
+        from agent.ollama_agent import OllamaCARAAgent
+        agent = OllamaCARAAgent()
+    else:
+        agent = DirectCARAAgent()
 
     print("=" * 60)
     print("CARA Demo: user_id -> account_id rename")
+    print(f"Provider: {provider}")
     print("=" * 60)
-
-    agent = CARAAgent(api_key=api_key)
 
     report = agent.analyze(
         task_description=(
