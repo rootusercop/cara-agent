@@ -57,12 +57,15 @@ cara-research/
 
 ## Key Results
 
+Results on the 515-case benchmark (5-run mean; std = 0.000):
+
 | Metric | CARA | Rule-only | LLM-only |
 |---|---|---|---|
 | Breaking Change F1 | **0.86** | 0.77 | 0.59 |
 | Plan Completeness | **0.97** | N/A | 0.41 |
 | Expand-Contract Compliance | **1.00** | N/A | 0.33 |
-| Overall Pass Rate | **0.80** | 0.47 | 0.20 |
+| Adapter Generation Rate | **0.97** | N/A | 0.00 |
+| Overall Pass Rate | **0.88** | 0.47 | 0.20 |
 
 ## Compile Paper
 
