@@ -1,0 +1,20 @@
+{
+  "case_id": "case_04",
+  "title": "Endpoint path change: /v1/users -> /v2/members",
+  "category": "api_only",
+  "description": "The endpoint path changes from /v1/users/{id} to /v2/members/{id}. All clients with hardcoded URLs will break.",
+  "expected": {
+    "schema_change_count": 0,
+    "api_change_count": 2,
+    "breaking_change_count": 1,
+    "safe_change_count": 1,
+    "api_changes": [
+      {"endpoint_or_rpc": "DELETE /v1/users/{id}", "change_type": "ENDPOINT_REMOVED", "severity": "BREAKING"},
+      {"endpoint_or_rpc": "DELETE /v2/members/{id}", "change_type": "ENDPOINT_ADDED", "severity": "SAFE"}
+    ],
+    "plan_must_include_expand": true,
+    "plan_must_include_rollback": true,
+    "requires_adapter": true,
+    "minimum_plan_steps": 4
+  }
+}

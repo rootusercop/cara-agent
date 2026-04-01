@@ -1,0 +1,37 @@
+{
+  "case_id": "case_09",
+  "title": "New optional field in schema + API (safe, both layers)",
+  "category": "schema_and_api",
+  "description": "A nullable read_at TIMESTAMP column is added to the notifications table, and the corresponding GET /notifications API response gains a read_at field. Because the column is nullable (no NOT NULL constraint, no DEFAULT required), existing rows remain valid and no migration is necessary. Existing API consumers that ignore unknown fields will continue working without changes. This is a fully backward-compatible, purely additive change at both the schema and API layers.",
+  "expected": {
+    "schema_change_count": 1,
+    "api_change_count": 1,
+    "breaking_change_count": 0,
+    "safe_change_count": 2,
+    "schema_changes": [
+      {
+        "change_type": "FIELD_ADDED",
+        "severity": "SAFE",
+        "table": "notifications",
+        "field": "read_at",
+        "nullable": true,
+        "reason": "Adding a nullable column to an existing table is backward-compatible. Existing rows get NULL for the new column, and existing INSERT statements that do not specify read_at continue to work."
+      }
+    ],
+    "api_changes": [
+      {
+        "change_type": "RESPONSE_FIELD_ADDED",
+        "severity": "SAFE",
+        "field": "read_at",
+        "endpoint": "GET /notifications",
+        "location": "response",
+        "nullable": true,
+        "reason": "Adding a new nullable field to a response payload is backward-compatible for any consumer that ignores unknown fields (standard JSON deserialization behavior)."
+      }
+    ],
+    "plan_must_include_expand": false,
+    "plan_must_include_rollback": false,
+    "requires_adapter": false,
+    "minimum_plan_steps": 2
+  }
+}

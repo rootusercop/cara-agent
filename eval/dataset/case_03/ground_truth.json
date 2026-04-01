@@ -1,0 +1,19 @@
+{
+  "case_id": "case_03",
+  "title": "Column type widening: INT -> BIGINT for amount",
+  "category": "schema_only",
+  "description": "The 'amount' column widens from INT to BIGINT. This is backward-compatible for reads (all INT values fit in BIGINT) but may require ORM/serializer updates.",
+  "expected": {
+    "schema_change_count": 1,
+    "api_change_count": 0,
+    "breaking_change_count": 0,
+    "safe_change_count": 1,
+    "schema_changes": [
+      {"element_name": "amount", "change_type": "TYPE_CHANGED", "severity": "BACKWARD_COMPATIBLE"}
+    ],
+    "plan_must_include_expand": false,
+    "plan_must_include_rollback": true,
+    "requires_adapter": false,
+    "minimum_plan_steps": 2
+  }
+}

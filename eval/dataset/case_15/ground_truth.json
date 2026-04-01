@@ -1,0 +1,64 @@
+{
+  "case_id": "case_15",
+  "title": "Gradual migration across 3 services (phased plan required, rename + type change)",
+  "category": "complex",
+  "description": "The fee column in the transactions table is renamed to processing_fee and its type changes from INT to BIGINT. There is no API change. Three downstream services consume the fee column: the Payments Service, the Reporting Service, and the Reconciliation Service. Each must be migrated independently in a phased plan to avoid data loss or downtime. Phase 1 adds processing_fee alongside fee (expand). Phase 2 dual-writes to both columns and migrates each service to read from processing_fee. Phase 3 removes the fee column once all three services have been migrated and verified (contract). The type change from INT to BIGINT is a widening change and is database-safe, but the rename is breaking for all three services.",
+  "expected": {
+    "schema_change_count": 3,
+    "api_change_count": 0,
+    "breaking_change_count": 2,
+    "safe_change_count": 1,
+    "schema_changes": [
+      {
+        "change_type": "FIELD_REMOVED",
+        "severity": "BREAKING",
+        "table": "transactions",
+        "field": "fee",
+        "reason": "Removing the fee column breaks all three downstream services (Payments, Reporting, Reconciliation) that currently read from or write to this column."
+      },
+      {
+        "change_type": "FIELD_ADDED",
+        "severity": "SAFE",
+        "table": "transactions",
+        "field": "processing_fee",
+        "reason": "Adding the processing_fee column is a safe additive change. Existing INSERT statements that omit processing_fee will continue to work since the column is nullable."
+      },
+      {
+        "change_type": "TYPE_CHANGED",
+        "severity": "BREAKING",
+        "table": "transactions",
+        "field": "fee",
+        "old_type": "INT",
+        "new_type": "BIGINT",
+        "reason": "Beyond the rename, the type changes from INT to BIGINT. While BIGINT is a widening change at the DB level, combined with the rename it constitutes a breaking change for any service that reads fee as an Int type and would now receive BIGINT values via processing_fee."
+      }
+    ],
+    "api_changes": [],
+    "plan_must_include_expand": true,
+    "plan_must_include_rollback": true,
+    "requires_adapter": true,
+    "minimum_plan_steps": 3,
+    "affected_services": [
+      "PaymentsService",
+      "ReportingService",
+      "ReconciliationService"
+    ],
+    "migration_phases": [
+      {
+        "phase": 1,
+        "name": "Expand",
+        "description": "Add processing_fee column alongside fee. Begin dual-writing to both columns in the application layer."
+      },
+      {
+        "phase": 2,
+        "name": "Migrate",
+        "description": "Update all three services (Payments, Reporting, Reconciliation) to read from processing_fee instead of fee. Backfill processing_fee for all existing rows using fee values."
+      },
+      {
+        "phase": 3,
+        "name": "Contract",
+        "description": "After all three services are verified reading processing_fee, stop writing to fee and drop the fee column."
+      }
+    ]
+  }
+}

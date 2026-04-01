@@ -1,0 +1,25 @@
+{
+  "case_id": "case_01",
+  "title": "Primary key field rename: user_id -> account_id",
+  "category": "schema_and_api",
+  "description": "The primary key 'user_id' is renamed to 'account_id' in both the schema and the API. This is a breaking change at both the storage and interface layers.",
+  "expected": {
+    "schema_change_count": 2,
+    "api_change_count": 3,
+    "breaking_change_count": 2,
+    "safe_change_count": 1,
+    "schema_changes": [
+      {"element_name": "user_id", "change_type": "FIELD_REMOVED", "severity": "BREAKING"},
+      {"element_name": "account_id", "change_type": "FIELD_ADDED", "severity": "SAFE"}
+    ],
+    "api_changes": [
+      {"endpoint_or_rpc": "GET /accounts/{user_id}", "change_type": "ENDPOINT_REMOVED", "severity": "BREAKING"},
+      {"endpoint_or_rpc": "GET /accounts/{account_id}", "change_type": "ENDPOINT_ADDED", "severity": "SAFE"},
+      {"field_or_param": "user_id", "change_type": "RESPONSE_FIELD_REMOVED", "severity": "BREAKING"}
+    ],
+    "plan_must_include_expand": true,
+    "plan_must_include_rollback": true,
+    "requires_adapter": true,
+    "minimum_plan_steps": 5
+  }
+}

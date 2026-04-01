@@ -1,0 +1,56 @@
+{
+  "case_id": "case_10",
+  "title": "Type change in schema breaking API contract (cascading)",
+  "category": "schema_and_api",
+  "description": "The invoices table changes amount and tax_amount from INT to DECIMAL(10,2). At the schema level this is a widening type change (INT fits within DECIMAL) and is backward-compatible for the database. However, the API contract changes the field type from integer to number, which is a breaking change for strictly-typed API consumers. A client that deserializes amount into a Kotlin Int or Java int field will receive a deserialization error when the server starts returning 99.99 instead of 9999. The cascading nature here is that the schema change (safe widening) directly causes the API type change (breaking for consumers).",
+  "expected": {
+    "schema_change_count": 2,
+    "api_change_count": 2,
+    "breaking_change_count": 2,
+    "safe_change_count": 2,
+    "schema_changes": [
+      {
+        "change_type": "TYPE_CHANGED",
+        "severity": "BACKWARD_COMPATIBLE",
+        "table": "invoices",
+        "field": "amount",
+        "old_type": "INT",
+        "new_type": "DECIMAL(10,2)",
+        "reason": "Widening a numeric type from INT to DECIMAL is backward-compatible at the database level. All existing integer values are representable as DECIMAL values."
+      },
+      {
+        "change_type": "TYPE_CHANGED",
+        "severity": "BACKWARD_COMPATIBLE",
+        "table": "invoices",
+        "field": "tax_amount",
+        "old_type": "INT",
+        "new_type": "DECIMAL(10,2)",
+        "reason": "Widening a numeric type from INT to DECIMAL is backward-compatible at the database level. All existing integer values are representable as DECIMAL values."
+      }
+    ],
+    "api_changes": [
+      {
+        "change_type": "RESPONSE_FIELD_TYPE_CHANGED",
+        "severity": "BREAKING",
+        "field": "amount",
+        "endpoint": "GET /invoices/{id}",
+        "old_type": "integer",
+        "new_type": "number",
+        "reason": "Changing an API response field from integer to number is breaking for any consumer that deserializes into a strict integer type (e.g., Int in Kotlin, int in Java). Values like 99.99 will cause deserialization failures."
+      },
+      {
+        "change_type": "RESPONSE_FIELD_TYPE_CHANGED",
+        "severity": "BREAKING",
+        "field": "tax_amount",
+        "endpoint": "GET /invoices/{id}",
+        "old_type": "integer",
+        "new_type": "number",
+        "reason": "Changing an API response field from integer to number is breaking for any consumer that deserializes into a strict integer type. Values like 9.99 will cause deserialization failures."
+      }
+    ],
+    "plan_must_include_expand": true,
+    "plan_must_include_rollback": true,
+    "requires_adapter": true,
+    "minimum_plan_steps": 4
+  }
+}

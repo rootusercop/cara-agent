@@ -1,0 +1,28 @@
+openapi: "3.0.0"
+info:
+  title: Profiles API
+  version: "2.0.0"
+paths:
+  /profiles/{id}:
+    get:
+      summary: Get a profile by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Profile found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  profile_id:
+                    type: string
+                  display_name:
+                    type: string
+                  email:
+                    type: string

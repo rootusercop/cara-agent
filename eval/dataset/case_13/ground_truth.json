@@ -1,0 +1,40 @@
+{
+  "case_id": "case_13",
+  "title": "Account-specific API version divergence (new response fields, strict-deserialization risk)",
+  "category": "multi_account",
+  "description": "Two new fields, account_tier and tier_features, are added to the GET /members/{id}/benefits response. From a pure OpenAPI contract perspective, adding fields to a response is backward-compatible. However, services that consume this endpoint using sealed Kotlin data classes or Jackson with DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES=true will throw a deserialization exception when they encounter the new fields. This is a practical breaking change for strict consumers even though the OpenAPI spec change is additive. The risk is particularly relevant for account-type-specific services that may have tightly-bound deserialization models.",
+  "expected": {
+    "schema_change_count": 0,
+    "api_change_count": 2,
+    "breaking_change_count": 0,
+    "safe_change_count": 2,
+    "schema_changes": [],
+    "api_changes": [
+      {
+        "change_type": "RESPONSE_FIELD_ADDED",
+        "severity": "SAFE",
+        "field": "account_tier",
+        "endpoint": "GET /members/{id}/benefits",
+        "location": "response",
+        "reason": "Adding a new field to a response is backward-compatible per OpenAPI spec. Lenient JSON deserializers ignore unknown fields by default.",
+        "caveat": "Consumers using sealed Kotlin data classes or Jackson with FAIL_ON_UNKNOWN_PROPERTIES=true will throw UnrecognizedPropertyException at runtime."
+      },
+      {
+        "change_type": "RESPONSE_FIELD_ADDED",
+        "severity": "SAFE",
+        "field": "tier_features",
+        "endpoint": "GET /members/{id}/benefits",
+        "location": "response",
+        "reason": "Adding a new array field to a response is backward-compatible per OpenAPI spec. Lenient deserializers will ignore it.",
+        "caveat": "Strict-deserialization consumers (sealed data classes, FAIL_ON_UNKNOWN_PROPERTIES) will break when this field appears in the response payload."
+      }
+    ],
+    "plan_must_include_expand": false,
+    "plan_must_include_rollback": false,
+    "requires_adapter": false,
+    "minimum_plan_steps": 2,
+    "multi_account_impact": true,
+    "strict_deserialization_warning": true,
+    "notes": "Consumers should audit their JSON deserialization configuration. Services using @JsonIgnoreProperties(ignoreUnknown = true) or equivalent are safe. Services without it may fail silently or throw exceptions depending on framework defaults."
+  }
+}

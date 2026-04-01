@@ -1,0 +1,30 @@
+{
+  "case_id": "case_11",
+  "title": "Multi-account field removal (INVEST service only impacted)",
+  "category": "multi_account",
+  "description": "The investment_account_id column is removed from the member_benefits table. This column is only populated and consumed by the INVEST account type service. Services handling other account types (BANK, CREDIT, LOAN) do not read or write this column, so they are unaffected. However, the INVEST service will break when it tries to read or write investment_account_id after the column is dropped. This is a targeted breaking change with limited blast radius, but it is still BREAKING for the affected consumer.",
+  "expected": {
+    "schema_change_count": 1,
+    "api_change_count": 0,
+    "breaking_change_count": 1,
+    "safe_change_count": 0,
+    "schema_changes": [
+      {
+        "change_type": "FIELD_REMOVED",
+        "severity": "BREAKING",
+        "table": "member_benefits",
+        "field": "investment_account_id",
+        "affected_consumers": ["INVEST"],
+        "reason": "Dropping a column that the INVEST service actively reads and writes will cause runtime errors (column not found) for that service. Other account-type consumers are unaffected since they never reference this column."
+      }
+    ],
+    "api_changes": [],
+    "plan_must_include_expand": false,
+    "plan_must_include_rollback": true,
+    "requires_adapter": false,
+    "minimum_plan_steps": 3,
+    "multi_account_impact": true,
+    "impacted_account_types": ["INVEST"],
+    "unaffected_account_types": ["BANK", "CREDIT", "LOAN"]
+  }
+}

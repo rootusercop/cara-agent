@@ -1,0 +1,32 @@
+openapi: "3.0.0"
+info:
+  title: Accounts API
+  version: "2.0"
+paths:
+  /accounts/{account_id}:
+    get:
+      summary: Get account by account_id
+      parameters:
+        - name: account_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Account found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+components:
+  schemas:
+    Account:
+      type: object
+      properties:
+        account_id:
+          type: string
+        email:
+          type: string
+        account_type:
+          type: string

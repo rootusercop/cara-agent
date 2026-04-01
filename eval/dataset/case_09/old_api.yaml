@@ -1,0 +1,27 @@
+openapi: "3.0.0"
+info:
+  title: Notifications API
+  version: "1.0.0"
+paths:
+  /notifications:
+    get:
+      summary: List all notifications
+      responses:
+        "200":
+          description: List of notifications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    user_id:
+                      type: string
+                    message:
+                      type: string
+                    sent_at:
+                      type: string
+                      format: date-time

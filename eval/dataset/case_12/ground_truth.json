@@ -1,0 +1,32 @@
+{
+  "case_id": "case_12",
+  "title": "Shared model split by account type (backward-compatible with adapter)",
+  "category": "multi_account",
+  "description": "A new NOT NULL column account_type is added to the entitlements table with a DEFAULT value of 'STANDARD'. Because the column carries a DEFAULT, existing rows are automatically backfilled during migration and existing INSERT statements that omit account_type will continue to work. This is technically backward-compatible at the database level. However, the semantic meaning of the column requires a migration script to correctly classify existing rows by their actual account type rather than defaulting all to 'STANDARD'. Services consuming entitlements may also need an adapter layer if they perform strict column projection. The change enables future account-type-specific filtering of entitlements.",
+  "expected": {
+    "schema_change_count": 1,
+    "api_change_count": 0,
+    "breaking_change_count": 0,
+    "safe_change_count": 1,
+    "schema_changes": [
+      {
+        "change_type": "FIELD_ADDED",
+        "severity": "BACKWARD_COMPATIBLE",
+        "table": "entitlements",
+        "field": "account_type",
+        "not_null": true,
+        "has_default": true,
+        "default_value": "STANDARD",
+        "reason": "Adding a NOT NULL column with a DEFAULT is backward-compatible at the DDL level: existing rows get the default value and existing INSERTs that omit this column still succeed. However, a data migration script is recommended to correctly populate account_type for existing rows rather than leaving them all as STANDARD."
+      }
+    ],
+    "api_changes": [],
+    "plan_must_include_expand": false,
+    "plan_must_include_rollback": false,
+    "requires_adapter": true,
+    "requires_migration_script": true,
+    "minimum_plan_steps": 3,
+    "multi_account_impact": true,
+    "notes": "The DEFAULT value of 'STANDARD' is a safe placeholder but should not be the final state. A migration script must backfill the correct account_type for all existing entitlement rows."
+  }
+}

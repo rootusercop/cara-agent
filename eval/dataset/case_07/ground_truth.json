@@ -1,0 +1,50 @@
+{
+  "case_id": "case_07",
+  "title": "Combined schema + API breaking change (field rename propagated)",
+  "category": "schema_and_api",
+  "description": "The profiles table renames full_name to display_name at the schema level, and this rename propagates to the GET /profiles/{id} API response. The rename is a two-part breaking change: the schema loses full_name (breaking for any direct DB consumers) and gains display_name (safe addition). The API mirrors this: the response drops full_name (breaking for API consumers) and adds display_name (safe). Clients that deserialize the response into a typed model with a full_name field will fail at runtime.",
+  "expected": {
+    "schema_change_count": 2,
+    "api_change_count": 2,
+    "breaking_change_count": 2,
+    "safe_change_count": 2,
+    "schema_changes": [
+      {
+        "change_type": "FIELD_REMOVED",
+        "severity": "BREAKING",
+        "table": "profiles",
+        "field": "full_name",
+        "reason": "Removing a NOT NULL column from an existing table breaks any reader or writer that references full_name directly."
+      },
+      {
+        "change_type": "FIELD_ADDED",
+        "severity": "SAFE",
+        "table": "profiles",
+        "field": "display_name",
+        "reason": "Adding a new column (even NOT NULL) is a safe additive change from a schema-diff perspective, though data migration is required."
+      }
+    ],
+    "api_changes": [
+      {
+        "change_type": "RESPONSE_FIELD_REMOVED",
+        "severity": "BREAKING",
+        "field": "full_name",
+        "endpoint": "GET /profiles/{id}",
+        "location": "response",
+        "reason": "Any API consumer that reads full_name from the response will get a deserialization error or null value after this change."
+      },
+      {
+        "change_type": "RESPONSE_FIELD_ADDED",
+        "severity": "SAFE",
+        "field": "display_name",
+        "endpoint": "GET /profiles/{id}",
+        "location": "response",
+        "reason": "Adding a new field to a response is backward-compatible for consumers that ignore unknown fields."
+      }
+    ],
+    "plan_must_include_expand": true,
+    "plan_must_include_rollback": true,
+    "requires_adapter": true,
+    "minimum_plan_steps": 4
+  }
+}

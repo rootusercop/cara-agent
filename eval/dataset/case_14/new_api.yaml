@@ -1,0 +1,43 @@
+openapi: "3.0.0"
+info:
+  title: Orders API
+  version: "2.0.0"
+paths:
+  /orders/{id}:
+    get:
+      summary: Get an order by ID with embedded product details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Order with embedded product
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  customer_id:
+                    type: string
+                  quantity:
+                    type: integer
+                  total_price:
+                    type: number
+                    format: double
+                    description: Pre-calculated order total
+                  product:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      name:
+                        type: string
+                      price:
+                        type: number
+                        format: double
+                        description: Product price as decimal

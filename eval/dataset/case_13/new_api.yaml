@@ -1,0 +1,38 @@
+openapi: "3.0.0"
+info:
+  title: Member Benefits API
+  version: "1.1.0"
+paths:
+  /members/{id}/benefits:
+    get:
+      summary: Get benefits for a member
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Member benefits
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    benefit_id:
+                      type: string
+                    benefit_name:
+                      type: string
+                    value:
+                      type: string
+                    account_tier:
+                      type: string
+                      description: The account tier associated with this benefit (e.g., PLUS, STANDARD)
+                    tier_features:
+                      type: array
+                      description: List of feature keys enabled by this benefit at the current tier
+                      items:
+                        type: string

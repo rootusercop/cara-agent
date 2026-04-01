@@ -1,0 +1,32 @@
+openapi: "3.0.0"
+info:
+  title: Invoices API
+  version: "2.0.0"
+paths:
+  /invoices/{id}:
+    get:
+      summary: Get an invoice by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Invoice found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  amount:
+                    type: number
+                    format: double
+                    description: Invoice amount as decimal
+                  tax_amount:
+                    type: number
+                    format: double
+                    description: Tax amount as decimal

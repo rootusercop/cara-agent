@@ -1,0 +1,27 @@
+{
+  "case_id": "case_06",
+  "title": "Request field removal (BREAKING)",
+  "category": "api_only",
+  "description": "The POST /payments endpoint removes the promo_code field from its request body. Clients that currently send promo_code in their payment requests will have that field silently dropped or rejected, depending on server validation strictness. This is a breaking change because callers relying on promotional discounts via this field will lose that functionality without any API-level indication.",
+  "expected": {
+    "schema_change_count": 0,
+    "api_change_count": 1,
+    "breaking_change_count": 1,
+    "safe_change_count": 0,
+    "schema_changes": [],
+    "api_changes": [
+      {
+        "change_type": "REQUEST_FIELD_REMOVED",
+        "severity": "BREAKING",
+        "field": "promo_code",
+        "endpoint": "POST /payments",
+        "location": "requestBody",
+        "reason": "Removing an optional request field that callers may actively send breaks those callers. The server can no longer accept or process the promo_code value, removing discount functionality for any consumer sending this field."
+      }
+    ],
+    "plan_must_include_expand": false,
+    "plan_must_include_rollback": true,
+    "requires_adapter": false,
+    "minimum_plan_steps": 2
+  }
+}

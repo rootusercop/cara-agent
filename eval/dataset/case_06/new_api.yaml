@@ -1,0 +1,40 @@
+openapi: "3.0.0"
+info:
+  title: Payments API
+  version: "2.0.0"
+paths:
+  /payments:
+    post:
+      summary: Create a payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - amount
+                - currency
+                - user_id
+              properties:
+                amount:
+                  type: number
+                  description: Payment amount
+                currency:
+                  type: string
+                  description: ISO 4217 currency code
+                user_id:
+                  type: string
+                  description: ID of the user making the payment
+      responses:
+        "201":
+          description: Payment created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payment_id:
+                    type: string
+                  status:
+                    type: string

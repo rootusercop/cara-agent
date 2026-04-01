@@ -1,0 +1,20 @@
+{
+  "case_id": "case_02",
+  "title": "Nullable field additions (trial_ends_at, cancelled_at)",
+  "category": "schema_only",
+  "description": "Two nullable timestamp fields added to subscriptions table. No API spec change. Both additions are safe.",
+  "expected": {
+    "schema_change_count": 2,
+    "api_change_count": 0,
+    "breaking_change_count": 0,
+    "safe_change_count": 2,
+    "schema_changes": [
+      {"element_name": "trial_ends_at", "change_type": "FIELD_ADDED", "severity": "SAFE"},
+      {"element_name": "cancelled_at", "change_type": "FIELD_ADDED", "severity": "SAFE"}
+    ],
+    "plan_must_include_expand": false,
+    "plan_must_include_rollback": true,
+    "requires_adapter": false,
+    "minimum_plan_steps": 2
+  }
+}

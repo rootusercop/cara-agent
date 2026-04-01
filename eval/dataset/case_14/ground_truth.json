@@ -1,0 +1,61 @@
+{
+  "case_id": "case_14",
+  "title": "Circular dependency (schema type change triggers cascading API changes)",
+  "category": "complex",
+  "description": "The products.price column changes from INT to DECIMAL(10,2). Because the orders API embeds product data in its response, this schema change cascades into a breaking API change: the embedded product.price field changes from integer to number in the response. Separately, a new total_price DECIMAL column is added to orders, which is a safe additive change at both schema and API layers. The key complexity here is the cross-table cascade: a type change in products directly propagates a breaking change into the orders API response through the embedded product object.",
+  "expected": {
+    "schema_change_count": 3,
+    "api_change_count": 2,
+    "breaking_change_count": 2,
+    "safe_change_count": 3,
+    "schema_changes": [
+      {
+        "change_type": "TYPE_CHANGED",
+        "severity": "BACKWARD_COMPATIBLE",
+        "table": "products",
+        "field": "price",
+        "old_type": "INT",
+        "new_type": "DECIMAL(10,2)",
+        "reason": "Widening from INT to DECIMAL is backward-compatible at the database level. All existing integer values fit in DECIMAL(10,2)."
+      },
+      {
+        "change_type": "FIELD_ADDED",
+        "severity": "SAFE",
+        "table": "orders",
+        "field": "total_price",
+        "reason": "Adding a nullable DECIMAL column to orders is a safe additive change. Existing rows get NULL and existing INSERTs that omit this column continue to work."
+      },
+      {
+        "change_type": "CASCADE_DETECTED",
+        "severity": "INFO",
+        "source_table": "products",
+        "source_field": "price",
+        "target_api": "GET /orders/{id}",
+        "target_field": "product.price",
+        "reason": "The type change in products.price cascades into the orders API response because product data is embedded in the order response object."
+      }
+    ],
+    "api_changes": [
+      {
+        "change_type": "RESPONSE_FIELD_TYPE_CHANGED",
+        "severity": "BREAKING",
+        "field": "product.price",
+        "endpoint": "GET /orders/{id}",
+        "old_type": "integer",
+        "new_type": "number",
+        "reason": "The embedded product.price field changes from integer to number due to the cascading schema type change. Consumers deserializing product.price into an int field will fail at runtime."
+      },
+      {
+        "change_type": "RESPONSE_FIELD_ADDED",
+        "severity": "SAFE",
+        "field": "total_price",
+        "endpoint": "GET /orders/{id}",
+        "reason": "Adding a new top-level field to the order response is backward-compatible for lenient deserializers."
+      }
+    ],
+    "plan_must_include_expand": true,
+    "plan_must_include_rollback": true,
+    "requires_adapter": true,
+    "minimum_plan_steps": 5
+  }
+}

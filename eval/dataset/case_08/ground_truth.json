@@ -1,0 +1,37 @@
+{
+  "case_id": "case_08",
+  "title": "Table split (complex schema restructuring)",
+  "category": "complex",
+  "description": "The user_addresses table is replaced by two purpose-specific tables: billing_addresses and shipping_addresses. The original table is dropped, removing the address_type discriminator column in favor of structural separation. Any service that queries or writes to user_addresses will break immediately. The split also loses the address_type column entirely since the new tables encode address type implicitly via table name. A phased migration plan is required: backfill new tables from old data, migrate readers, migrate writers, then drop the old table.",
+  "expected": {
+    "schema_change_count": 3,
+    "api_change_count": 0,
+    "breaking_change_count": 1,
+    "safe_change_count": 2,
+    "schema_changes": [
+      {
+        "change_type": "TABLE_REMOVED",
+        "severity": "BREAKING",
+        "table": "user_addresses",
+        "reason": "Dropping an existing table breaks all readers and writers that reference it. Any ORM mapping, raw SQL, or migration referencing user_addresses will fail."
+      },
+      {
+        "change_type": "TABLE_ADDED",
+        "severity": "SAFE",
+        "table": "billing_addresses",
+        "reason": "Adding a new table is a purely additive, safe change. No existing consumers are affected."
+      },
+      {
+        "change_type": "TABLE_ADDED",
+        "severity": "SAFE",
+        "table": "shipping_addresses",
+        "reason": "Adding a new table is a purely additive, safe change. No existing consumers are affected."
+      }
+    ],
+    "api_changes": [],
+    "plan_must_include_expand": true,
+    "plan_must_include_rollback": true,
+    "requires_adapter": true,
+    "minimum_plan_steps": 6
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "case_id": "case_05",
+  "title": "Response field additions (created_at, updated_at) - safe",
+  "category": "api_only",
+  "description": "Two timestamp fields added to the Order response. Adding response fields is backward-compatible — properly written consumers ignore unknown fields.",
+  "expected": {
+    "schema_change_count": 0,
+    "api_change_count": 2,
+    "breaking_change_count": 0,
+    "safe_change_count": 2,
+    "api_changes": [
+      {"field_or_param": "created_at", "change_type": "RESPONSE_FIELD_ADDED", "severity": "SAFE"},
+      {"field_or_param": "updated_at", "change_type": "RESPONSE_FIELD_ADDED", "severity": "SAFE"}
+    ],
+    "plan_must_include_expand": false,
+    "plan_must_include_rollback": true,
+    "requires_adapter": false,
+    "minimum_plan_steps": 2
+  }
+}
