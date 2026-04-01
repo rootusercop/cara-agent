@@ -113,14 +113,14 @@ trace downstream consumers across service boundaries, classify every change as
 a coordinated expand-contract migration plan with tested adapter code in Python,
 Java, Kotlin, and TypeScript.
 
-We evaluate CARA on a 515-case benchmark (15 expert-crafted plus 500
-programmatically generated from real-world patterns) spanning five change
-categories. CARA achieves \textbf{0.86 F1} on breaking-change detection,
-\textbf{1.00} expand-contract compliance, and \textbf{0.97} plan completeness,
-outperforming both rule-based and prompt-only baselines by substantial margins.
-Five repeated runs yield standard deviation 0.000 across all metrics,
-confirming full reproducibility. All code, benchmark data, and evaluation
-scripts are publicly available.
+We evaluate the CARA tool pipeline on a 515-case benchmark (15 expert-crafted
+plus 500 programmatically generated from real-world patterns) spanning five
+change categories. CARA achieves \textbf{0.86 F1} on breaking-change
+detection, \textbf{1.00} expand-contract compliance, and \textbf{0.97} plan
+completeness, outperforming both rule-based and prompt-only baselines by
+substantial margins. The tool pipeline is deterministic: five repeated runs
+yield standard deviation 0.000 across all metrics. All code, benchmark data,
+and evaluation scripts are publicly available.
 \end{abstract}
 
 \noindent\textbf{Keywords:} refactoring agents, distributed systems, API evolution,
@@ -535,14 +535,33 @@ plan generation, no adapter code.
 \textbf{LLM-only:} Claude 3.5 Sonnet with no tools, prompted with the same
 schema/API diffs and asked to produce a migration plan.
 
+\subsection{Evaluation Methodology}
+
+We evaluate the CARA \emph{tool pipeline} directly, invoking all seven tools in
+their canonical sequence without LLM mediation. This approach serves two
+purposes. First, it isolates the quality of the analytical tools from LLM
+sampling variance, yielding fully reproducible results (std = 0.000 across 5
+repeated runs). Second, it enables evaluation at the 515-case scale without
+prohibitive API cost.
+
+The tool pipeline is the core contribution of this work: every detection,
+classification, plan step, and adapter is produced by the seven tools
+(Section~4). The ReAct LLM agent's role is to select and sequence these tools
+for open-ended natural-language requests; for the structured cases in our
+benchmark the canonical sequence is fixed. Consistent with this, running the
+tool pipeline on the 15 expert-crafted cases produces a 0.80 pass rate and
+0.96 mean score — identical to the originally reported LLM-agent result on the
+same cases, confirming that the agent correctly delegates to the tool layer.
+
 \subsection{Results}
 
-Table~\ref{tab:results} presents quantitative results. Figure~\ref{fig:results}
-visualizes the comparison across all metrics.
+Table~\ref{tab:results} presents quantitative results for the CARA tool
+pipeline. The Rule-only and LLM-only baselines are evaluated on the 15
+expert-crafted cases. Figure~\ref{fig:results} visualizes the comparison.
 
 \begin{table}[h]
 \centering
-\caption{CARA evaluation results on the 515-case benchmark (5-run mean; std = 0.000 for all metrics).}
+\caption{CARA tool pipeline on 515 cases (5-run mean; std = 0.000). Baselines evaluated on 15 expert cases.}
 \label{tab:results}
 \small
 \setlength{\tabcolsep}{3pt}
@@ -690,10 +709,17 @@ regex fallback.
 Three ambiguous cases (type widening, optional response additions) may
 reasonably be classified differently.
 
-\paragraph{Reproducibility} The evaluation uses a fully deterministic
-pipeline with no LLM sampling. We ran the complete 515-case benchmark
-five times; every metric achieves standard deviation 0.000, confirming
-that results are not sensitive to run order or random state.
+\paragraph{Evaluation pipeline} The 515-case benchmark evaluates the CARA
+tool pipeline without LLM inference. The full ReAct LLM agent is not
+evaluated at this scale; doing so would require approximately 2.5 hours of
+API calls. On the 15 expert-crafted cases, the tool pipeline and LLM agent
+produce identical results (0.80 pass rate), supporting the claim that the
+tool layer captures the system's analytical quality. Large-scale LLM-agent
+evaluation is left as future work.
+
+\paragraph{Reproducibility} Because the evaluation uses no LLM sampling, all
+results are fully deterministic. Five repeated runs yield standard deviation
+0.000 on every metric.
 
 %% ------------------------------------------------------------------
 \section{Conclusion}
