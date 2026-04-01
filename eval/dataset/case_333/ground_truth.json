@@ -1,0 +1,16 @@
+{
+  "case_id": "case_333",
+  "title": "Field 'type' renamed to 'is_active' in both schema and API for 'memberships'.",
+  "category": "schema_and_api",
+  "description": "Field 'type' renamed to 'is_active' in both schema and API for 'memberships'.",
+  "expected": {
+    "schema_change_count": 2,
+    "api_change_count": 2,
+    "breaking_change_count": 2,
+    "safe_change_count": 2,
+    "plan_must_include_expand": true,
+    "plan_must_include_rollback": true,
+    "requires_adapter": true,
+    "minimum_plan_steps": 5
+  }
+}

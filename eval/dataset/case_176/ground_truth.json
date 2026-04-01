@@ -1,0 +1,16 @@
+{
+  "case_id": "case_176",
+  "title": "Endpoint path changed from '/v1/policies' to '/v2/policies'.",
+  "category": "api_only",
+  "description": "Endpoint path changed from '/v1/policies' to '/v2/policies'.",
+  "expected": {
+    "schema_change_count": 0,
+    "api_change_count": 2,
+    "breaking_change_count": 1,
+    "safe_change_count": 1,
+    "plan_must_include_expand": true,
+    "plan_must_include_rollback": true,
+    "requires_adapter": true,
+    "minimum_plan_steps": 4
+  }
+}

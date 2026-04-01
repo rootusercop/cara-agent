@@ -1,0 +1,16 @@
+{
+  "case_id": "case_126",
+  "title": "Response field 'notes' type changed from integer to string in GET '/api/rewards'",
+  "category": "api_only",
+  "description": "Response field 'notes' type changed from integer to string in GET '/api/rewards' (breaking).",
+  "expected": {
+    "schema_change_count": 0,
+    "api_change_count": 1,
+    "breaking_change_count": 1,
+    "safe_change_count": 0,
+    "plan_must_include_expand": true,
+    "plan_must_include_rollback": true,
+    "requires_adapter": true,
+    "minimum_plan_steps": 4
+  }
+}

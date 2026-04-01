@@ -1,0 +1,16 @@
+{
+  "case_id": "case_265",
+  "title": "Optional field 'type' added to both schema and API for 'accounts' (safe).",
+  "category": "schema_and_api",
+  "description": "Optional field 'type' added to both schema and API for 'accounts' (safe).",
+  "expected": {
+    "schema_change_count": 1,
+    "api_change_count": 1,
+    "breaking_change_count": 0,
+    "safe_change_count": 2,
+    "plan_must_include_expand": false,
+    "plan_must_include_rollback": true,
+    "requires_adapter": false,
+    "minimum_plan_steps": 2
+  }
+}

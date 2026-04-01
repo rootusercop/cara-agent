@@ -1,0 +1,16 @@
+{
+  "case_id": "case_093",
+  "title": "Column 'is_verified' renamed to 'name' in the 'coupons' table.",
+  "category": "schema_only",
+  "description": "Column 'is_verified' renamed to 'name' in the 'coupons' table.",
+  "expected": {
+    "schema_change_count": 2,
+    "api_change_count": 0,
+    "breaking_change_count": 1,
+    "safe_change_count": 1,
+    "plan_must_include_expand": true,
+    "plan_must_include_rollback": true,
+    "requires_adapter": true,
+    "minimum_plan_steps": 4
+  }
+}

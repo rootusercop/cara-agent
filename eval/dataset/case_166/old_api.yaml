@@ -1,0 +1,21 @@
+openapi: "3.0.0"
+info:
+  title: Service API
+  version: "1.0"
+paths:
+  /api/sessions:
+    post:
+      summary: Create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [category, name]
+              properties:
+                category: {type: string}
+                name: {type: string}
+      responses:
+        "201":
+          description: Created

@@ -1,0 +1,4 @@
+CREATE TABLE claims (
+    id   VARCHAR(36) NOT NULL PRIMARY KEY,
+    user_id INT NOT NULL
+);

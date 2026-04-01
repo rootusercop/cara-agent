@@ -1,0 +1,17 @@
+openapi: "3.0.0"
+info:
+  title: Service API
+  version: "v1"
+paths:
+  /v1/entitlements:
+    get:
+      summary: Endpoint
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  category: {type: string}
+                  id: {type: string}

@@ -1,0 +1,4 @@
+CREATE TABLE tickets (
+    id    VARCHAR(36) NOT NULL PRIMARY KEY,
+    tags INT NOT NULL
+);

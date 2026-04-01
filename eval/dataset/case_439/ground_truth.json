@@ -1,0 +1,16 @@
+{
+  "case_id": "case_439",
+  "title": "Nullable field 'account_id' added for BUSINESS account type (safe).",
+  "category": "multi_account",
+  "description": "Nullable field 'account_id' added for BUSINESS account type (safe).",
+  "expected": {
+    "schema_change_count": 1,
+    "api_change_count": 0,
+    "breaking_change_count": 0,
+    "safe_change_count": 1,
+    "plan_must_include_expand": false,
+    "plan_must_include_rollback": true,
+    "requires_adapter": false,
+    "minimum_plan_steps": 2
+  }
+}

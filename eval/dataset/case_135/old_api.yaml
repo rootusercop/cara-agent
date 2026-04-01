@@ -1,0 +1,16 @@
+openapi: "3.0.0"
+info:
+  title: Service API
+  version: "1.0"
+paths:
+  /api/incidents:
+    get:
+      summary: Endpoint
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  score: {type: string}

@@ -1,0 +1,16 @@
+{
+  "case_id": "case_360",
+  "title": "Field 'email' renamed to 'count' in both schema and API for 'audit_logs'.",
+  "category": "schema_and_api",
+  "description": "Field 'email' renamed to 'count' in both schema and API for 'audit_logs'.",
+  "expected": {
+    "schema_change_count": 2,
+    "api_change_count": 2,
+    "breaking_change_count": 2,
+    "safe_change_count": 2,
+    "plan_must_include_expand": true,
+    "plan_must_include_rollback": true,
+    "requires_adapter": true,
+    "minimum_plan_steps": 5
+  }
+}

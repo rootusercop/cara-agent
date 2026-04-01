@@ -1,0 +1,17 @@
+openapi: "3.0.0"
+info:
+  title: Service API
+  version: "v2"
+paths:
+  /v2/memberships:
+    get:
+      summary: Endpoint
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  is_verified: {type: string}
+                  id: {type: string}

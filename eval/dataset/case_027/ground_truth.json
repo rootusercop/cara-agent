@@ -1,0 +1,16 @@
+{
+  "case_id": "case_027",
+  "title": "Column 'category' type widened from DECIMAL(10,2) to DECIMAL(15,4) in 'devices' ",
+  "category": "schema_only",
+  "description": "Column 'category' type widened from DECIMAL(10,2) to DECIMAL(15,4) in 'devices' (safe widening).",
+  "expected": {
+    "schema_change_count": 1,
+    "api_change_count": 0,
+    "breaking_change_count": 0,
+    "safe_change_count": 1,
+    "plan_must_include_expand": false,
+    "plan_must_include_rollback": true,
+    "requires_adapter": false,
+    "minimum_plan_steps": 2
+  }
+}

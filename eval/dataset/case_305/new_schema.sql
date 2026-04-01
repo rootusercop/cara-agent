@@ -1,0 +1,4 @@
+CREATE TABLE reports (
+    id   VARCHAR(36) NOT NULL PRIMARY KEY,
+    phone BIGINT NOT NULL
+);

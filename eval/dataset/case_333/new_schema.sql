@@ -1,0 +1,5 @@
+CREATE TABLE memberships (
+    id      VARCHAR(36) NOT NULL PRIMARY KEY,
+    is_active VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

@@ -1,0 +1,16 @@
+{
+  "case_id": "case_477",
+  "title": "Table 'dashboards' split into 'dashboards_core' (core) and 'dashboards_extended'",
+  "category": "complex",
+  "description": "Table 'dashboards' split into 'dashboards_core' (core) and 'dashboards_extended' (extended).",
+  "expected": {
+    "schema_change_count": 3,
+    "api_change_count": 0,
+    "breaking_change_count": 1,
+    "safe_change_count": 2,
+    "plan_must_include_expand": true,
+    "plan_must_include_rollback": true,
+    "requires_adapter": true,
+    "minimum_plan_steps": 5
+  }
+}

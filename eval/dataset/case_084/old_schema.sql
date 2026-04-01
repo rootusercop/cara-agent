@@ -1,0 +1,4 @@
+CREATE TABLE contracts (
+    id    VARCHAR(36) NOT NULL PRIMARY KEY,
+    balance BIGINT NOT NULL
+);

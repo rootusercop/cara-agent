@@ -1,0 +1,16 @@
+{
+  "case_id": "case_059",
+  "title": "Nullable column 'metadata' added to 'inventory' table (safe change).",
+  "category": "schema_only",
+  "description": "Nullable column 'metadata' added to 'inventory' table (safe change).",
+  "expected": {
+    "schema_change_count": 1,
+    "api_change_count": 0,
+    "breaking_change_count": 0,
+    "safe_change_count": 1,
+    "plan_must_include_expand": false,
+    "plan_must_include_rollback": true,
+    "requires_adapter": false,
+    "minimum_plan_steps": 2
+  }
+}

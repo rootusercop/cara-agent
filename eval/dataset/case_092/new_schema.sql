@@ -1,0 +1,6 @@
+CREATE TABLE coupons (
+    id      VARCHAR(36) NOT NULL PRIMARY KEY,
+    fee  VARCHAR(100),
+    country  VARCHAR(100),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

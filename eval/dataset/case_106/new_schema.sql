@@ -1,0 +1,6 @@
+CREATE TABLE sessions (
+    id      VARCHAR(36) NOT NULL PRIMARY KEY,
+    price  VARCHAR(100),
+    notes  VARCHAR(100),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

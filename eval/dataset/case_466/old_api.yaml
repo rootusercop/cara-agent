@@ -1,0 +1,15 @@
+openapi: "3.0.0"
+info: {title: API, version: "1.0"}
+paths:
+  /api/contracts:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  metadata: {type: string}
+                  user_id: {type: string}
+                  score: {type: string}

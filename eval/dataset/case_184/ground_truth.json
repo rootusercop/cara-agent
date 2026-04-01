@@ -1,0 +1,16 @@
+{
+  "case_id": "case_184",
+  "title": "Required request field 'country' removed from POST '/api/tickets' (breaking).",
+  "category": "api_only",
+  "description": "Required request field 'country' removed from POST '/api/tickets' (breaking).",
+  "expected": {
+    "schema_change_count": 0,
+    "api_change_count": 1,
+    "breaking_change_count": 1,
+    "safe_change_count": 0,
+    "plan_must_include_expand": true,
+    "plan_must_include_rollback": true,
+    "requires_adapter": true,
+    "minimum_plan_steps": 4
+  }
+}

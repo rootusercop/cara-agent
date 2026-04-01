@@ -1,0 +1,5 @@
+CREATE TABLE dashboards (
+    id      VARCHAR(36) NOT NULL PRIMARY KEY,
+    customer_id VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

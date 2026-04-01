@@ -1,0 +1,4 @@
+CREATE TABLE profiles (
+    id   VARCHAR(36) NOT NULL PRIMARY KEY,
+    price BIGINT NOT NULL
+);

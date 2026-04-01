@@ -1,0 +1,6 @@
+CREATE TABLE products (
+    id      VARCHAR(36) NOT NULL PRIMARY KEY,
+    quantity  VARCHAR(100),
+    rank  VARCHAR(100),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

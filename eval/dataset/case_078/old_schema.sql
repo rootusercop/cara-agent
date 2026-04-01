@@ -1,0 +1,6 @@
+CREATE TABLE warehouses (
+    id      VARCHAR(36) NOT NULL PRIMARY KEY,
+    description  VARCHAR(100),
+    state  VARCHAR(100),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

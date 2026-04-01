@@ -1,0 +1,4 @@
+CREATE TABLE accounts (
+    id   VARCHAR(36) NOT NULL PRIMARY KEY,
+    is_active INT NOT NULL
+);

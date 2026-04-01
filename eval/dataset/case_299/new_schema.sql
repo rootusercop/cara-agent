@@ -1,0 +1,4 @@
+CREATE TABLE products (
+    id   VARCHAR(36) NOT NULL PRIMARY KEY,
+    expires_at BIGINT NOT NULL
+);

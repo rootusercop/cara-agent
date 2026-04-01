@@ -1,0 +1,6 @@
+CREATE TABLE transactions (
+    id      VARCHAR(36) NOT NULL PRIMARY KEY,
+    fee  VARCHAR(100),
+    price  VARCHAR(100),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

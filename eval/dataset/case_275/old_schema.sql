@@ -1,0 +1,4 @@
+CREATE TABLE discounts (
+    id   VARCHAR(36) NOT NULL PRIMARY KEY,
+    type INT NOT NULL
+);

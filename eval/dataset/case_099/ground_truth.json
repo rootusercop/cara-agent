@@ -1,0 +1,16 @@
+{
+  "case_id": "case_099",
+  "title": "Two columns renamed in 'contracts': 'metadata' -> 'amount', 'status' -> 'balance",
+  "category": "schema_only",
+  "description": "Two columns renamed in 'contracts': 'metadata' -> 'amount', 'status' -> 'balance'.",
+  "expected": {
+    "schema_change_count": 4,
+    "api_change_count": 0,
+    "breaking_change_count": 2,
+    "safe_change_count": 2,
+    "plan_must_include_expand": true,
+    "plan_must_include_rollback": true,
+    "requires_adapter": true,
+    "minimum_plan_steps": 5
+  }
+}

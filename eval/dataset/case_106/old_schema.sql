@@ -1,0 +1,6 @@
+CREATE TABLE sessions (
+    id      VARCHAR(36) NOT NULL PRIMARY KEY,
+    status  VARCHAR(100),
+    deleted_at  VARCHAR(100),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

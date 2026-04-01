@@ -1,0 +1,16 @@
+{
+  "case_id": "case_344",
+  "title": "Column 'is_deleted' widened INT->BIGINT in schema, API format updated int32->int",
+  "category": "schema_and_api",
+  "description": "Column 'is_deleted' widened INT->BIGINT in schema, API format updated int32->int64.",
+  "expected": {
+    "schema_change_count": 1,
+    "api_change_count": 1,
+    "breaking_change_count": 2,
+    "safe_change_count": 0,
+    "plan_must_include_expand": true,
+    "plan_must_include_rollback": true,
+    "requires_adapter": true,
+    "minimum_plan_steps": 4
+  }
+}

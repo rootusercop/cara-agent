@@ -1,0 +1,4 @@
+CREATE TABLE incidents (
+    id   VARCHAR(36) NOT NULL PRIMARY KEY,
+    tier INT NOT NULL
+);

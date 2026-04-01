@@ -1,0 +1,16 @@
+{
+  "case_id": "case_466",
+  "title": "Three fields renamed simultaneously in 'contracts' schema and API (phased migrat",
+  "category": "complex",
+  "description": "Three fields renamed simultaneously in 'contracts' schema and API (phased migration required).",
+  "expected": {
+    "schema_change_count": 6,
+    "api_change_count": 6,
+    "breaking_change_count": 6,
+    "safe_change_count": 6,
+    "plan_must_include_expand": true,
+    "plan_must_include_rollback": true,
+    "requires_adapter": true,
+    "minimum_plan_steps": 5
+  }
+}

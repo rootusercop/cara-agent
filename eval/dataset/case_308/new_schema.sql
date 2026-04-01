@@ -1,0 +1,4 @@
+CREATE TABLE promotions (
+    id   VARCHAR(36) NOT NULL PRIMARY KEY,
+    fee BIGINT NOT NULL
+);

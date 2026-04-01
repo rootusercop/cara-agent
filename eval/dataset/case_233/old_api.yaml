@@ -1,0 +1,13 @@
+openapi: "3.0.0"
+info: {title: API, version: "1.0"}
+paths:
+  /api/policies:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name: {type: integer, format: int32}

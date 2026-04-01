@@ -1,0 +1,6 @@
+CREATE TABLE contracts (
+    id      VARCHAR(36) NOT NULL PRIMARY KEY,
+    metadata  VARCHAR(100),
+    status  VARCHAR(100),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

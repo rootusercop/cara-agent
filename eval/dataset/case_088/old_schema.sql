@@ -1,0 +1,5 @@
+CREATE TABLE accounts (
+    id          VARCHAR(36) NOT NULL PRIMARY KEY,
+    amount      DECIMAL(10,2) NOT NULL,
+    created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

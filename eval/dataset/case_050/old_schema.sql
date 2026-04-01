@@ -1,0 +1,6 @@
+CREATE TABLE products (
+    id      VARCHAR(36) NOT NULL PRIMARY KEY,
+    total  VARCHAR(100),
+    email  VARCHAR(100),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

@@ -1,0 +1,5 @@
+CREATE TABLE notifications (
+    id      VARCHAR(36) NOT NULL PRIMARY KEY,
+    metadata VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

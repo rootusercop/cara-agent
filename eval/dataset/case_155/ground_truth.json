@@ -1,0 +1,16 @@
+{
+  "case_id": "case_155",
+  "title": "Response field 'fee' removed from GET '/api/promotions' (breaking for consumers)",
+  "category": "api_only",
+  "description": "Response field 'fee' removed from GET '/api/promotions' (breaking for consumers).",
+  "expected": {
+    "schema_change_count": 0,
+    "api_change_count": 1,
+    "breaking_change_count": 1,
+    "safe_change_count": 0,
+    "plan_must_include_expand": true,
+    "plan_must_include_rollback": true,
+    "requires_adapter": true,
+    "minimum_plan_steps": 4
+  }
+}

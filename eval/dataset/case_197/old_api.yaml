@@ -1,0 +1,17 @@
+openapi: "3.0.0"
+info:
+  title: Service API
+  version: "1.0"
+paths:
+  /api/users:
+    get:
+      summary: Get
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count: {type: string}
+                  deleted_at: {type: string}

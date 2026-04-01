@@ -1,0 +1,16 @@
+{
+  "case_id": "case_088",
+  "title": "NOT NULL column 'state' added to 'accounts' without a DEFAULT (breaking).",
+  "category": "schema_only",
+  "description": "NOT NULL column 'state' added to 'accounts' without a DEFAULT (breaking).",
+  "expected": {
+    "schema_change_count": 1,
+    "api_change_count": 0,
+    "breaking_change_count": 1,
+    "safe_change_count": 0,
+    "plan_must_include_expand": true,
+    "plan_must_include_rollback": true,
+    "requires_adapter": true,
+    "minimum_plan_steps": 4
+  }
+}
