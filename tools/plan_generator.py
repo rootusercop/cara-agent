@@ -273,6 +273,35 @@ def _build_expand_steps(
                 description="Maintain the field in the response payload — return null or empty string until consumers are migrated off it.",
                 estimated_risk="LOW",
             ))
+        elif ct == ACT.RESPONSE_FIELD_TYPE_CHANGED:
+            steps.append(MigrationStep(
+                step_number=start_num,
+                step_type=StepType.API_VERSIONING,
+                title=f"[EXPAND] Version the response to support both old and new type for '{change.field_or_param}'",
+                description=(
+                    f"Add a versioned response variant that returns '{change.field_or_param}' in both "
+                    f"the old type ({change.old_value}) and the new type ({change.new_value}). "
+                    "Consumers can migrate to the new type before the old representation is removed."
+                ),
+                estimated_risk="MEDIUM",
+            ))
+
+    # Handle schema TABLE_REMOVED as an expand step
+    for change, classification in breaking_schema:
+        from tools.schema_diff import ChangeType as SCT
+        ct = change.change_type
+        if ct == SCT.TABLE_REMOVED:
+            steps.append(MigrationStep(
+                step_number=start_num,
+                step_type=StepType.DEPRECATION_NOTICE,
+                title=f"[EXPAND] Mark table '{change.table_or_message}' as deprecated and restrict new writes",
+                description=(
+                    f"Do not remove table '{change.table_or_message}' yet. "
+                    "Redirect all writes to the replacement table(s) and add an audit trigger. "
+                    "Keep old table readable until all consumers have migrated."
+                ),
+                estimated_risk="LOW",
+            ))
 
     return steps
 

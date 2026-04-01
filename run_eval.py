@@ -22,16 +22,36 @@ def main() -> None:
     parser.add_argument("--cases", nargs="+", help="Specific case IDs to run")
     parser.add_argument("--language", default="python", choices=["python", "java", "kotlin", "typescript"])
     parser.add_argument("--output", help="Save results to JSON file")
-    parser.add_argument("--model", default="claude-sonnet-4-6", help="Claude model to use")
+    parser.add_argument("--model", default="claude-sonnet-4-6", help="Model to use")
+    parser.add_argument("--provider", default="anthropic", choices=["anthropic", "ollama", "direct"],
+                        help="LLM provider: anthropic (default), ollama (local), or direct (no LLM)")
+    parser.add_argument("--ollama-url", default="http://localhost:11434/v1",
+                        help="Ollama base URL (default: http://localhost:11434/v1)")
     parser.add_argument("--quiet", action="store_true", help="Suppress per-case output")
     args = parser.parse_args()
 
-    api_key = os.environ.get("ANTHROPIC_API_KEY")
-    if not api_key:
-        print("ERROR: ANTHROPIC_API_KEY environment variable not set.", file=sys.stderr)
-        sys.exit(1)
+    if args.provider == "direct":
+        from agent.direct_agent import DirectCARAAgent
+        from eval.runner import EvalRunner as _EvalRunner
+        agent = DirectCARAAgent()
+        runner = _EvalRunner.__new__(_EvalRunner)
+        runner.agent = agent
+    elif args.provider == "ollama":
+        from agent.ollama_agent import OllamaCARAAgent
+        from eval.runner import EvalRunner as _EvalRunner
 
-    runner = EvalRunner(api_key=api_key, model=args.model)
+        ollama_model = args.model if args.model != "claude-sonnet-4-6" else "llama3.2"
+        agent = OllamaCARAAgent(base_url=args.ollama_url, model=ollama_model)
+
+        # Patch the runner to use our Ollama agent
+        runner = _EvalRunner.__new__(_EvalRunner)
+        runner.agent = agent
+    else:
+        api_key = os.environ.get("ANTHROPIC_API_KEY")
+        if not api_key:
+            print("ERROR: ANTHROPIC_API_KEY environment variable not set.", file=sys.stderr)
+            sys.exit(1)
+        runner = EvalRunner(api_key=api_key, model=args.model)
     result = runner.run_all(
         case_ids=args.cases,
         language=args.language,

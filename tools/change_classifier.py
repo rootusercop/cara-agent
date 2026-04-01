@@ -85,10 +85,12 @@ def _classify_schema_change(
 
     if ct == ChangeType.FIELD_ADDED:
         nullable = change.metadata.get("nullable", True)
-        if nullable:
+        new_val_str = str(change.new_value or "").upper()
+        has_default = "DEFAULT" in new_val_str
+        if nullable or has_default:
             return ChangeClassification(
                 severity=Severity.SAFE,
-                reason="Adding a nullable column is backward-compatible: existing rows get NULL, existing queries unaffected.",
+                reason="Adding a nullable column (or NOT NULL with a DEFAULT) is backward-compatible: existing rows are unaffected.",
                 affected_consumers=[],
             )
         else:
@@ -164,6 +166,12 @@ def _classify_schema_change(
             return ChangeClassification(
                 severity=Severity.BACKWARD_COMPATIBLE,
                 reason="Making a NOT NULL column nullable is backward-compatible for existing data.",
+            )
+        is_primary_key = change.metadata.get("primary_key", False)
+        if is_primary_key:
+            return ChangeClassification(
+                severity=Severity.SAFE,
+                reason="Explicitly adding NOT NULL to a PRIMARY KEY column is safe — primary keys are implicitly NOT NULL.",
             )
         return ChangeClassification(
             severity=Severity.BREAKING,

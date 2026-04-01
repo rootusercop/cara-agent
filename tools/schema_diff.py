@@ -145,9 +145,11 @@ def _diff_sql(old_ddl: str, new_ddl: str) -> list[SchemaChange]:
                     old_value=old_type, new_value=new_type,
                 ))
             if old_nullable != new_nullable:
+                is_pk = "PRIMARY KEY" in old_def.upper() or "PRIMARY KEY" in new_def.upper()
                 changes.append(SchemaChange(
                     ChangeType.NULLABLE_CHANGED, table, col,
                     old_value=str(old_nullable), new_value=str(new_nullable),
+                    metadata={"primary_key": is_pk},
                 ))
     return changes
 

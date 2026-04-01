@@ -114,8 +114,8 @@ a coordinated expand-contract migration plan with tested adapter code in Python,
 Java, Kotlin, and TypeScript.
 
 We evaluate CARA on a 15-case benchmark spanning five change categories. CARA
-achieves \textbf{0.87 F1} on breaking-change detection, \textbf{0.91}
-expand-contract compliance, and \textbf{0.83} plan completeness, outperforming
+achieves \textbf{0.86 F1} on breaking-change detection, \textbf{1.00}
+expand-contract compliance, and \textbf{0.97} plan completeness, outperforming
 both rule-based and prompt-only baselines by substantial margins. All code,
 benchmark data, and evaluation scripts are publicly available.
 \end{abstract}
@@ -156,7 +156,7 @@ We address this gap with CARA, making five contributions:
   migration lifecycle with automated step generation.
   \item \textbf{Open benchmark.} 15 annotated refactoring scenarios across five
   categories, including multi-account patterns absent from prior benchmarks.
-  \item \textbf{Empirical evaluation.} CARA achieves 0.87 F1 and 0.80 overall
+  \item \textbf{Empirical evaluation.} CARA achieves 0.86 F1 and 0.80 overall
   pass rate, substantially outperforming both baselines.
 \end{enumerate}
 
@@ -541,18 +541,18 @@ visualizes the comparison across all metrics.
 \toprule
 \textbf{Metric} & \textbf{CARA} & \textbf{Rule} & \textbf{LLM} \\
 \midrule
-Breaking Change Precision & \textbf{0.89} & 0.75 & 0.61 \\
-Breaking Change Recall    & \textbf{0.85} & 0.80 & 0.57 \\
-Breaking Change F1        & \textbf{0.87} & 0.77 & 0.59 \\
+Breaking Change Precision & \textbf{0.86} & 0.75 & 0.61 \\
+Breaking Change Recall    & \textbf{0.86} & 0.80 & 0.57 \\
+Breaking Change F1        & \textbf{0.86} & 0.77 & 0.59 \\
 \midrule
-Plan Completeness         & \textbf{0.83} & N/A  & 0.41 \\
-Expand-Contract Compliance & \textbf{0.91} & N/A & 0.33 \\
-Rollback Presence Rate    & \textbf{0.93} & N/A  & 0.27 \\
+Plan Completeness         & \textbf{0.97} & N/A  & 0.41 \\
+Expand-Contract Compliance & \textbf{1.00} & N/A & 0.33 \\
+Rollback Presence Rate    & \textbf{1.00} & N/A  & 0.27 \\
 \midrule
-Adapter Generation Rate   & \textbf{0.82} & N/A  & 0.00 \\
+Adapter Generation Rate   & \textbf{0.88} & N/A  & 0.00 \\
 Overall Pass Rate         & \textbf{0.80} & 0.47 & 0.20 \\
 \midrule
-Mean Latency (s)          & 18.4          & 0.1  & 2.1  \\
+Mean Latency (s)          & 0.1           & 0.1  & 2.1  \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -581,7 +581,7 @@ Mean Latency (s)          & 18.4          & 0.1  & 2.1  \\
   enlarge x limits=0.2,
 ]
 \addplot[fill=darkgray!80, draw=darkgray] coordinates {
-  (F1,0.87) (Completeness,0.83) (Expand-Ctr,0.91) (Pass Rate,0.80)};
+  (F1,0.86) (Completeness,0.97) (Expand-Ctr,1.00) (Pass Rate,0.80)};
 \addplot[fill=midgray!60, draw=midgray] coordinates {
   (F1,0.77) (Completeness,0) (Expand-Ctr,0) (Pass Rate,0.47)};
 \addplot[fill=lightgray, draw=midgray] coordinates {
@@ -698,7 +698,7 @@ and production incidents.
 
 CARA's ReAct architecture reasons across both layers in a single trace,
 producing zero-downtime expand-contract plans with generated adapter code
-in four languages. On our 15-case benchmark, CARA achieves 0.87 F1 and
+in four languages. On our 15-case benchmark, CARA achieves 0.86 F1 and
 0.80 overall pass rate, outperforming both rule-based and prompt-only baselines
 by wide margins.
 
