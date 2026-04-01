@@ -141,7 +141,7 @@ This coordination problem is well-known in industry but remains poorly tooled.
 Fowler's refactoring catalog~\cite{fowler1999refactoring} targets object-level
 refactoring. Schema migration tools (Flyway, Liquibase) are structurally mechanical.
 API versioning tools (Bump.sh, OpenAPI Diff) ignore the storage layer entirely.
-No prior work unifies both layers into a single reasoning system.
+We are unaware of a system that unifies both layers into a single reasoning agent.
 
 The cost of this gap is measurable. Cito et al.~\cite{cito2021empirical} identified
 API failures as the leading cause of service disruptions in cloud deployments.
@@ -654,8 +654,8 @@ contract testing but requires manual contract authoring and ignores the schema l
 \paragraph{Schema Migration} Steidl et al.~\cite{steidl2023migration} cataloged
 12 categories of schema migration challenges across 42 projects. Flyway and
 Liquibase are the dominant tools but offer no semantic classification of change
-severity. To our knowledge, CARA is the first system to apply LLM reasoning
-to schema migration planning.
+severity. We are unaware of prior work applying LLM reasoning to
+schema migration planning at the semantic level CARA targets.
 
 \paragraph{LLM Agents for Software Engineering} SWE-bench~\cite{jimenez2024swebench}
 established the standard benchmark for LLM agents resolving GitHub issues.
