@@ -60,13 +60,13 @@
 %% ------------------------------------------------------------------
 \tikzset{
   box/.style={rectangle, rounded corners=4pt, draw=darkgray, thick,
-              fill=white, text centered, minimum height=1.8em, minimum width=4.5em,
+              fill=white, text centered, align=center, minimum height=1.8em, minimum width=4.5em,
               font=\small},
   toolbox/.style={rectangle, rounded corners=2pt, draw=midgray,
                   fill=lightgray!50, text centered, minimum height=1.5em,
                   font=\scriptsize},
   phase/.style={rectangle, rounded corners=4pt, draw=darkgray, thick,
-                fill=white, text centered, minimum height=2em, minimum width=5em,
+                fill=white, text centered, align=center, minimum height=2em, minimum width=5em,
                 font=\small\bfseries},
   arrow/.style={-{Stealth[length=5pt]}, thick, draw=darkgray},
   dasharrow/.style={-{Stealth[length=5pt]}, dashed, draw=midgray},
@@ -134,7 +134,7 @@ Modern distributed systems expose shared data models to heterogeneous consumers.
 A single \texttt{users} table may simultaneously serve mobile clients, internal
 back-office services, and regulated reporting pipelines. When business requirements
 force a rename of \texttt{user\_id} to \texttt{account\_id}, the change is not
-a simple \texttt{ALTER TABLE} — it is a coordinated migration across the database
+a simple \texttt{ALTER TABLE}: it is a coordinated migration across the database
 schema, ORM mappings, OpenAPI contracts, and every downstream service.
 
 This coordination problem is well-known in industry but remains poorly tooled.
@@ -174,11 +174,11 @@ We address this gap with CARA, making five contributions:
 Figure~\ref{fig:dual-layer} shows how a single data model change propagates
 across two independently managed layers. The storage layer (schema) and the
 interface layer (API spec) are defined in separate files, owned by separate
-teams, and versioned independently — yet they must remain semantically consistent.
+teams, and versioned independently, yet they must remain semantically consistent.
 When they fall out of sync, consumer services fail silently until a runtime error
 surfaces in production.
 
-\begin{figure}[h]
+\begin{figure*}[t]
 \centering
 \begin{tikzpicture}[node distance=0.6cm and 1.2cm]
   % Top node
@@ -217,7 +217,7 @@ surfaces in production.
 \caption{A data model change propagates across two independently managed layers.
          Failures occur when the layers are not migrated in coordination.}
 \label{fig:dual-layer}
-\end{figure}
+\end{figure*}
 
 \subsection{Multi-Service Complexity}
 
@@ -309,7 +309,7 @@ reasoning loop~\cite{yao2023react} drives a Claude 3.5 Sonnet LLM with native to
 use~\cite{anthropic2024claude}. The agent alternates between \textsc{Thought},
 \textsc{Action}, and \textsc{Observation} steps until it produces a migration report.
 
-\begin{figure}[h]
+\begin{figure*}[t]
 \centering
 \begin{tikzpicture}[node distance=0.5cm and 0.3cm]
   % Input
@@ -350,7 +350,7 @@ use~\cite{anthropic2024claude}. The agent alternates between \textsc{Thought},
 \caption{CARA architecture. The ReAct agent orchestrates a seven-tool registry
          to produce a unified migration report covering both schema and API layers.}
 \label{fig:architecture}
-\end{figure}
+\end{figure*}
 
 \begin{algorithm}[h]
 \caption{CARA ReAct Loop}
@@ -411,7 +411,7 @@ Figure~\ref{fig:expand-contract} formalizes the four-phase pattern that CARA
 uses as the backbone of every migration plan. The key invariant is that
 old structures are never removed until all consumers have migrated.
 
-\begin{figure}[h]
+\begin{figure*}[t]
 \centering
 \begin{tikzpicture}[node distance=0.4cm]
   \node[phase, fill=lightgray!30, minimum width=2.5cm] (expand)
@@ -445,7 +445,7 @@ old structures are never removed until all consumers have migrated.
 \caption{The four-phase expand-contract lifecycle. CARA generates phase-ordered
          steps automatically and always places a rollback checkpoint at the start.}
 \label{fig:expand-contract}
-\end{figure}
+\end{figure*}
 
 \subsection{Example Reasoning Trace}
 
@@ -459,7 +459,7 @@ ACTION:  parse_schema_diff(old, new, "sql")
 OBS:     [{FIELD_REMOVED, accounts, user_id},
           {FIELD_ADDED,   accounts, account_id}]
 
-THOUGHT: Change propagated to the API — check spec.
+THOUGHT: Change propagated to the API; check spec.
 ACTION:  diff_api_contracts(old_api, new_api, "openapi")
 OBS:     [{ENDPOINT_REMOVED, GET /accounts/{user_id}},
           {ENDPOINT_ADDED,   GET /accounts/{account_id}},
@@ -529,7 +529,7 @@ rate, adapter generation rate, and overall pass rate.
 \subsection{Baselines}
 
 \textbf{Rule-only:} Our \texttt{classify\_breaking\_change} tool without LLM
-reasoning — change detection and classification only, no consumer tracing, no
+reasoning: change detection and classification only, no consumer tracing, no
 plan generation, no adapter code.
 
 \textbf{LLM-only:} Claude 3.5 Sonnet with no tools, prompted with the same
@@ -550,7 +550,7 @@ classification, plan step, and adapter is produced by the seven tools
 for open-ended natural-language requests; for the structured cases in our
 benchmark the canonical sequence is fixed. Consistent with this, running the
 tool pipeline on the 15 expert-crafted cases produces a 0.80 pass rate and
-0.96 mean score — identical to the originally reported LLM-agent result on the
+0.96 mean score, identical to the originally reported LLM-agent result on the
 same cases, confirming that the agent correctly delegates to the tool layer.
 
 \subsection{Results}
@@ -622,41 +622,51 @@ Mean Latency (s)          & 0.1           & 0.1  & 2.1  \\
 \label{fig:results}
 \end{figure}
 
-\paragraph{Schema-only cases (01--03)} CARA correctly classifies all severities.
-The INT-to-BIGINT widening is labeled BACKWARD\_COMPATIBLE with an ORM update
-warning — matching ground truth exactly. The LLM-only baseline misclassifies it
-as BREAKING in 2 of 3 runs.
+\paragraph{Expert cases: schema-only (01--03)} The following qualitative analysis
+refers to the 15 expert-crafted cases run through the full tool pipeline.
+CARA correctly classifies all severities. The INT-to-BIGINT widening is labeled
+BACKWARD\_COMPATIBLE with an ORM update warning, matching ground truth exactly.
+The LLM-only baseline (no tools) misclassifies it as BREAKING in 2 of 3 runs.
 
-\paragraph{API-only cases (04--06)} CARA detects the endpoint path change as
-BREAKING and generates a three-phase expand-contract plan with a deprecation
+\paragraph{Expert cases: API-only (04--06)} CARA detects the endpoint path change
+as BREAKING and generates a three-phase expand-contract plan with a deprecation
 notice step. The LLM-only baseline omits the rollback checkpoint in 4 of 5 runs.
 
-\paragraph{Combined cases (07--10)} Case 07 shows CARA's clearest advantage.
-Processing both layers in a single trace, it recognizes that \texttt{full\_name}
-removal appears in \emph{both} the schema and API response and generates one
-coordinated plan. The rule-only baseline produces two independent plans that
-create an inconsistent intermediate state.
+\paragraph{Expert cases: combined (07--10)} Case 07 shows CARA's clearest advantage.
+By processing both layers in a single pipeline pass, it recognizes that
+\texttt{full\_name} removal appears in \emph{both} the schema and API response
+and generates one coordinated plan. The rule-only baseline produces two
+independent plans that create an inconsistent intermediate state.
 
-\paragraph{Multi-account cases (11--13)} Case 11 demonstrates per-consumer-group
+\paragraph{Expert cases: multi-account (11--13)} Case 11 demonstrates per-consumer-group
 classification. CARA traces consumers and identifies \texttt{investment\_account\_id}
 as referenced only by the investment service, labeling the removal BREAKING for
-that service but SAFE for all others. Rule-only baseline labels it globally BREAKING.
+that service but SAFE for all others. The rule-only baseline labels it globally BREAKING.
 
-\paragraph{Complex cases (14--15)} The cascading type change (Case 14) requires 5
-tool calls across both layers. CARA passes with score 0.78. The phased migration
-(Case 15) produces a matching 3-phase plan but misses one consumer reference
-due to string-interpolated SQL, yielding a warning.
+\paragraph{Expert cases: complex (14--15)} The cascading type change (Case 14)
+requires all seven tools across both layers. CARA passes with score 0.78. The
+phased migration (Case 15) produces a matching 3-phase plan but misses one
+consumer reference due to string-interpolated SQL, yielding a warning.
 
 \subsection{Error Analysis}
 
-Three cases fail. Primary failure modes:
+Across the 515-case benchmark, 64 cases fail (pass rate 0.876). The complex
+category accounts for the majority of failures: 40 of 53 complex cases fail,
+reflecting the inherent difficulty of multi-step cascading migrations. The
+remaining 24 failures are distributed across the schema-only (16) and combined
+(4) and multi-account (4) categories. Three primary failure modes emerge:
+
 \begin{enumerate}[leftmargin=*,itemsep=1pt,topsep=2pt]
-  \item \textbf{Consumer undercounting} (2 cases): The regex tracer misses
+  \item \textbf{Insufficient expand steps} (16 cases): The plan generator
+  produces fewer steps than required by ground truth for NOT NULL column
+  additions and column removals. The pipeline correctly identifies the
+  change as BREAKING but underestimates the migration complexity.
+  \item \textbf{Complex multi-field cascades} (40 cases): Scenarios
+  requiring simultaneous rename of 3 or more fields across both layers
+  exceed the plan generator's current step-count heuristics.
+  \item \textbf{Consumer undercounting} (8 cases): The regex tracer misses
   references via string interpolation (e.g., \texttt{f"SELECT \{field\}"}).
   Extending AST coverage to Java/Kotlin would address this.
-  \item \textbf{GraphQL type misclassification} (1 case): An incomplete rule
-  classifies a field type change as BACKWARD\_COMPATIBLE when it should be
-  BREAKING. A one-line rule fix resolves this.
 \end{enumerate}
 
 %% ------------------------------------------------------------------
@@ -673,20 +683,26 @@ contract testing but requires manual contract authoring and ignores the schema l
 \paragraph{Schema Migration} Steidl et al.~\cite{steidl2023migration} cataloged
 12 categories of schema migration challenges across 42 projects. Flyway and
 Liquibase are the dominant tools but offer no semantic classification of change
-severity. We are unaware of prior work applying LLM reasoning to
-schema migration planning at the semantic level CARA targets.
+severity. Parnin et al.~\cite{parnin2022dozer} demonstrated automated migration
+synthesis in the infrastructure-as-code domain, migrating imperative shell
+commands to declarative Ansible modules via execution profiling. CARA applies
+analogous synthesis to the schema-and-API domain, where the migration target
+is a coordinated expand-contract plan rather than a single-layer command translation.
 
 \paragraph{LLM Agents for Software Engineering} SWE-bench~\cite{jimenez2024swebench}
 established the standard benchmark for LLM agents resolving GitHub issues.
 Xia and Zhang~\cite{xia2023automated} and Wei et al.~\cite{wei2023llm4se} explored
-LLM-based automated repair. None address distributed system refactoring or the
-dual-layer coordination problem. The ReAct framework~\cite{yao2023react} motivates
-our agent's reasoning structure; chain-of-thought prompting~\cite{wei2022chainofthought}
+LLM-based automated repair. Parnin et al.~\cite{parnin2025copilot} identified
+key challenges in shipping LLM-powered copilots inside software products,
+noting that tool grounding and context scoping are the primary failure modes.
+None of these address distributed system refactoring or the dual-layer
+coordination problem. The ReAct framework~\cite{yao2023react} motivates our
+agent's reasoning structure; chain-of-thought prompting~\cite{wei2022chainofthought}
 informs the multi-step tool orchestration design.
 
 \paragraph{Refactoring Research} Kim et al.~\cite{kim2012field} identified
 cross-team coordination and consumer identification as the top refactoring pain
-points at Microsoft — precisely the gaps CARA addresses. Evans~\cite{evans2004ddd}
+points at Microsoft, precisely the gaps CARA addresses. Evans~\cite{evans2004ddd}
 introduced bounded contexts, which underpin our per-consumer-group classification.
 The expand-contract pattern formalizes Humble and Farley's~\cite{humble2010continuous}
 zero-downtime deployment principle.
@@ -695,10 +711,12 @@ zero-downtime deployment principle.
 \section{Threats to Validity}
 %% ------------------------------------------------------------------
 
-\paragraph{Internal validity} Benchmark cases are manually constructed from
-real-world patterns. They may not capture the full diversity of production
-refactoring tasks. We partially mitigate this with complex and multi-account
-categories absent from prior benchmarks.
+\paragraph{Internal validity} Fifteen benchmark cases are expert-crafted from
+real production incidents; the remaining 500 are programmatically generated
+from parameterized templates. Template-generated cases have limited variance
+within each pattern family. They may not capture the full diversity of
+production refactoring tasks. We partially mitigate this with complex and
+multi-account categories absent from prior benchmarks.
 
 \paragraph{External validity} CARA was evaluated primarily on Python and SQL
 codebases. Performance on Go, Ruby, or PHP ecosystems is unknown. AST-level
